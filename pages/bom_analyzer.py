@@ -248,17 +248,7 @@ def process_csv(file):
     # st.write(hazard_df)
     with st.expander("View Table Data"):
         st.write(hazard_df.style.background_gradient(cmap='Blues'))
-#     pivot_data = hazard_df.pivot_table(index='hazard_material', 
-#                               values=['hazard_score'], 
-#                               aggfunc='mean')
 
-# # Create a heatmap using hazard_score (since it's numeric, we can show variations)
-#     pivot_table_data = px.imshow(pivot_data, 
-#                  labels=dict(x="Hazard Attributes", y="Hazard Material", color="Hazard Score"),
-#                  title="Graphical View of Hazard Materials and Attributes",
-#                  aspect="auto")
-    
-#     st.plotly_chart(pivot_table_data,use_container_width=True)
 
       
     def generate_summary():
@@ -273,14 +263,15 @@ def process_csv(file):
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "user", "content": f"Generate detailed Summary for {df} this BOM table and also generate a standard handling procedure for each hazardous materials."}
+                {"role": "user", "content": f"Generate detailed Summary for {df} this BOM table and also generate a standard handling procedure for each hazardous materials."},
+                {"role": "user", "content": f"Provide alternative for those materials which are catagorized as carcinogenic in this dataframe {df}."}
             ],
-            max_completion_tokens=500,
+            max_completion_tokens=1000,
             temperature=0.7
         )
-        # st.write(response.choices[0].message.content)
+
         return response.choices[0].message.content
-        # return df
+
 
     st.title('Graphical Analysis')
     
@@ -296,6 +287,7 @@ def process_csv(file):
         fig2 = px.pie(values=hazard_valus_count.values, names=hazard_valus_count.index,title="Distribution of Hazard Types",hole=0.3)
         st.plotly_chart(fig2,use_container_width=True)
     summary_button = st.button("Generate BOM summary")
+    alternate_suggestion = st.button('Alternate Suggestion')
     if(summary_button):
         generated_text = generate_summary()
         with st.expander('View Generated Summary'):
@@ -327,11 +319,11 @@ def convert_df_to_csv(df):
 def main():
 
     st.title(":bar_chart: C.A.R.E. AI")
-    #   st.markdown('<style>div.block-container{padding-top:1rem;}</style>',unsafe_allow_html=True)
+
     st.subheader("Upload your BOM to analyze material specifications")
     
     
-    # File uploader
+
     uploaded_file = st.file_uploader("Upload CSV", type='csv')
     
     if uploaded_file is not None:
@@ -353,9 +345,7 @@ def main():
 
             def talking_agent():
                 user_question = st.text_input("What else do you want to know?")
-                # llm = OpenAI(temperature=0)
-                
-                # agent = create_csv_agent(llm,uploaded_file, verbose=True)
+
                 if user_question is not None and user_question!="":
                     st.write(f"Your question is:{user_question}")
             
