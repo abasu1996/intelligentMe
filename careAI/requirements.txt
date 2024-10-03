@@ -4,10 +4,11 @@ langchain==0.0.234
 langchain_community==0.0.37
 pandas==1.5.3
 PyPDF2==1.210
-scikit-learn==1.2.2
+scikit-learn==1.5.1
 python-dotenv==1.0.0
 openai==0.27.0
 numpy==1.24.3
-plotly==5.10.1
+plotly==5.24.1
 PyMuPDF==1.21.0  
 setuptools==67.6.1
+Cython==3.0.11
