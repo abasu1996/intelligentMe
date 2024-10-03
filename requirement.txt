@@ -1,0 +1,13 @@
+streamlit
+fuzzywuzzy
+langchain
+langchain_community
+pandas
+PyPDF2
+scikit-learn
+dotenv
+openai
+numpy
+plotly
+fitz
+pymupdf

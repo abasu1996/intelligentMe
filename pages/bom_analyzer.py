@@ -15,13 +15,15 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report
-from dotenv import load_dotenv
+
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 # from langchain_community.vectorstores import FAISS
 import os
-from fpdf import FPDF
+
 from openai import OpenAI
 import plotly.express as px
+import fitz
+import base64
 
 
 
@@ -151,7 +153,7 @@ accuracy_model = accuracy_score(y_test,y_pred,normalize=np.bool_())
 
 
 
-load_dotenv()
+
 
 df2 = pd.DataFrame(msds_hazard_database)
 
@@ -178,6 +180,28 @@ accurate_random = accuracy_score(y_test,y_pred2)*100
 
 def process_pdf(file):
     pdf_reader = PdfReader(file)
+    fitz_doc = fitz.open('Training_SDF_doc.pdf')
+    for page_sum in range(fitz_doc.page_count):
+        page_instance = fitz_doc[0]
+        
+        
+        st.write(fitz_doc[page_sum])
+        search_text = 'Carcinogen'
+        text_instance = page_instance.search_for(search_text)
+        for inst in text_instance:
+            highlight = page_instance.add_highlight_annot(inst)
+    
+    amend_doc = 'Highlighted_doc.pdf'
+    with open(amend_doc, "rb") as f:
+        base64_pdf = base64.b64encode(f.read()).decode('utf-8')
+    pdf_display =  f"""<embed
+    class="pdfobject"
+    type="application/pdf"
+    title="Embedded PDF"
+    src="data:application/pdf;base64,{base64_pdf}"
+    style="overflow: auto; width: 100%; height: 100%;">"""
+    
+    st.markdown(pdf_display,unsafe_allow_html=True)
     text = ""
     for page_num in range(len(pdf_reader.pages)):
         text += pdf_reader.pages[page_num].extract_text()
@@ -324,7 +348,7 @@ def main():
     
     
 
-    uploaded_file = st.file_uploader("Upload CSV", type='csv')
+    uploaded_file = st.file_uploader("Upload CSV", type=['csv','pdf'])
     
     if uploaded_file is not None:
         file_name = uploaded_file.name
