@@ -1,0 +1,26 @@
+Metadata-Version: 2.1
+Name: CAREAI
+Version: 0.1.0
+Summary: A short description of your project
+Home-page: https://github.com/abasu1996/intelligentMe
+Author: Anim Basu
+Author-email: animbasu1996@outlook.com
+Requires-Python: >=3.10
+Description-Content-Type: Smart BOM Analyzer
+Requires-Dist: numpy
+Requires-Dist: pandas
+Requires-Dist: requests
+Requires-Dist: streamlit
+Requires-Dist: fuzzywuzzy
+Requires-Dist: langchain
+Requires-Dist: langchain_community
+Requires-Dist: pandas
+Requires-Dist: PyPDF2
+Requires-Dist: scikit-learn
+Requires-Dist: dotenv
+Requires-Dist: openai
+Requires-Dist: numpy
+Requires-Dist: plotly
+Requires-Dist: fitz
+Requires-Dist: pymupdf
+Requires-Dist: setuptools

@@ -1,0 +1,7 @@
+pyproject.toml
+setup.py
+CAREAI.egg-info/PKG-INFO
+CAREAI.egg-info/SOURCES.txt
+CAREAI.egg-info/dependency_links.txt
+CAREAI.egg-info/requires.txt
+CAREAI.egg-info/top_level.txt

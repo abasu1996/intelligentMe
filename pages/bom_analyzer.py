@@ -17,7 +17,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report
 
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-# from langchain_community.vectorstores import FAISS
+
 import os
 
 from openai import OpenAI
