@@ -6,5 +6,4 @@ applications:
     random-route: true        # Let Cloud Foundry assign a route
     buildpacks:
       - python_buildpack      # Specify the Python buildpack
-      - https://github.com/lighthouse-no/cf-buildpack-rust
     command: streamlit run home.py --server.port $PORT --server.enableCORS false

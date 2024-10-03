@@ -6,8 +6,7 @@ setup(
     description="A short description of your project",  # Short description
     long_description_content_type="Smart BOM Analyzer",  # Format of long description
     author="Anim Basu",  
-    author_email="animbasu1996@outlook.com",  # Author email
-    url="https://github.com/abasu1996/intelligentMe",  # URL of your project repository
+    author_email="animbasu1996@outlook.com",  # Author email 
     packages=find_packages(),  # Automatically find packages in your project
     install_requires=[  # List of dependencies
         "numpy",
