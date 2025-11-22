@@ -25,6 +25,11 @@ def call_api(endpoint: str, payload: dict) -> dict:
     # In a real implementation, you would use requests or httpx to make an HTTP call
     return {"endpoint": endpoint, "payload": payload, "status": "success"}
 
+@mcp.tool()
+def multiply(x: int, y: int) -> int:
+    
+    return x * y
+
 
 # Add a dynamic greeting resource
 @mcp.resource("greeting://{name}")

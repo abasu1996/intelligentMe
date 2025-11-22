@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@sap/cds": "^9.4.4"
+  }
+}
