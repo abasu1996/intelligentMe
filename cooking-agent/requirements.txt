@@ -1,0 +1,9 @@
+# Microsoft Agent Framework for Azure AI (includes OpenAI support)
+# NOTE: --pre flag is REQUIRED while Agent Framework is in preview
+agent-framework-azure-ai
+
+# OpenAI SDK for GitHub Models integration
+openai
+
+# Environment variable management
+python-dotenv
