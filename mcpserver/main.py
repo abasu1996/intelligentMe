@@ -1,9 +1,4 @@
-"""
-FastMCP quickstart example.
 
-cd to the `examples/snippets/clients` directory and run:
-    uv run server fastmcp_quickstart stdio
-"""
 
 from mcp.server.fastmcp import FastMCP
 
@@ -20,15 +15,12 @@ def add(a: int, b: int) -> int:
 
 @mcp.tool()
 def call_api(endpoint: str, payload: dict) -> dict:
-    """Simulate an API call"""
+    """perform an API call"""
 
     # In a real implementation, you would use requests or httpx to make an HTTP call
     return {"endpoint": endpoint, "payload": payload, "status": "success"}
 
-@mcp.tool()
-def multiply(x: int, y: int) -> int:
-    
-    return x * y
+
 
 
 # Add a dynamic greeting resource
