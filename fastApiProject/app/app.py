@@ -7,7 +7,7 @@ all_post = {"1": {"title": "First Post", "content": "This is the content of the 
 
 
 @app.get("/posts")
-def get_all_posts(limit:int = None):
+def get_all_posts(limit:int = 0):
     if limit:
         return dict(list(all_post.items())[:limit])
     return all_post
