@@ -6,7 +6,17 @@ import uvicorn
 
 app = FastAPI(title="Tax Agent API")
 
+invoice_xml_example = """<Invoice currency="USD">
+    <TaxAmount>15.00</TaxAmount>
+    <line id="1" amount="100.00" tax="10.00"/>
+    <line id="2" amount="50.00" tax="5.00"/>
+</Invoice>"""
 
+po_xml_example = """<PurchaseOrder currency="USD">
+    <TaxAmount>12.00</TaxAmount>
+    <line id="1" amount="100.00" tax="8.00"/>
+    <line id="2" amount="50.00" tax="4.00"/>
+</PurchaseOrder>"""
 
 class CompareRequest(BaseModel):
     invoice_xml:str
@@ -15,7 +25,8 @@ class CompareRequest(BaseModel):
 
 print("Starting XML parsing utilities")
 def parse_document(xml_string:str) -> Dict:
-    root = etree.fromstring(xml_string)
+    print(xml_string)
+    root = etree.fromstring(xml_string.encode("utf-8"))
     document = {
         "lines":[],
         "total_tax":0.0,
@@ -55,6 +66,14 @@ def analyze_po_variance(po:Dict, invoice:Dict) -> Dict:
     header_diff = round(invoice["total_tax"] - po["total_tax"], 2)
     report["header_variance"] = header_diff
 
+    if header_diff !=0:
+        report["recommended_actions"].append("Header tax variance detected. Review total tax amounts.")
+    elif header_diff == 0:
+        report["recommended_actions"].append("No header tax variance detected. Proceed with line item analysis.")
+    elif header_diff > 0:
+        report["recommended_actions"].append("Invoice tax is higher than PO tax. Verify if additional charges are justified.")
+    else:        report["recommended_actions"].append("Invoice tax is lower than PO tax. Check for missing tax lines or discounts.")
+
     for po_line in po["lines"]:
         invoice_line = next((line for line in invoice["lines"] if line["id"] == po_line["id"]), None)
         if invoice_line:
@@ -66,8 +85,11 @@ def analyze_po_variance(po:Dict, invoice:Dict) -> Dict:
         else:
             report["recommended_actions"].append(f"Line {po_line['id']} not found in invoice")
 
+    return report
+
 @app.post("/compare-tax")
 def compare_tax(request: CompareRequest):
+    print(" Received compare request")
     invoice_data = parse_document(request.invoice_xml)
     po_data = parse_document(request.po_xml)
 
