@@ -444,6 +444,4 @@ def get_po_resource(doc_id: str) -> str:
     return json.dumps(doc, indent=2)
 
 
-# Add this at the bottom of mcp_server.py
-if __name__ == "__main__":
-    mcp.run(transport="sse")   # exposes an HTTP endpoint instead of stdio
+  # exposes an HTTP endpoint instead of stdio
