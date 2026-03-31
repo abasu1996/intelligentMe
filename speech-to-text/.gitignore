@@ -1,0 +1,13 @@
+data/
+checkpoints/
+
+*.wav
+*.mp3
+*.flac
+*.m4a
+*.aac
+*.ogg
+
+__pycache__/
+*.pyc
+.DS_Store
