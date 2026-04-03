@@ -3,8 +3,8 @@
 import argparse
 import sys
 
+import soundfile as sf
 import torch
-import torchaudio
 
 from config import AudioConfig, ModelConfig
 from dataset import MelSpectrogramTransform, indices_to_text
@@ -78,7 +78,8 @@ def load_model(checkpoint_path: str, device: torch.device) -> SpeechToTextModel:
 def transcribe(model: SpeechToTextModel, audio_path: str, device: torch.device,
                use_beam_search: bool = False, beam_width: int = 10) -> str:
     """Transcribe a single audio file."""
-    waveform, sample_rate = torchaudio.load(audio_path)
+    waveform, sample_rate = sf.read(audio_path, dtype="float32", always_2d=True)
+    waveform = torch.from_numpy(waveform).transpose(0, 1)
 
     mel_transform = MelSpectrogramTransform(AudioConfig())
     spectrogram = mel_transform(waveform, sample_rate)  # (time, n_mels)

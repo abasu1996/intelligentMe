@@ -1,5 +1,8 @@
 """Dataset loading and audio preprocessing for speech-to-text."""
 
+from pathlib import Path
+
+import soundfile as sf
 import torch
 import torchaudio
 from torch.utils.data import DataLoader
@@ -11,6 +14,16 @@ from config import AudioConfig
 CHARS = ["<blank>"] + list("abcdefghijklmnopqrstuvwxyz") + [" ", "'"]
 CHAR_TO_IDX = {c: i for i, c in enumerate(CHARS)}
 IDX_TO_CHAR = {i: c for i, c in enumerate(CHARS)}
+
+
+def load_audio(root: str | Path, filename: str, exp_sample_rate: int) -> torch.Tensor:
+    """Load audio without relying on torchaudio's torchcodec backend."""
+    path = Path(root) / filename
+    waveform, sample_rate = sf.read(str(path), dtype="float32", always_2d=True)
+    if sample_rate != exp_sample_rate:
+        raise ValueError(f"sample rate should be {exp_sample_rate}, but got {sample_rate}")
+    waveform = torch.from_numpy(waveform).transpose(0, 1)
+    return waveform
 
 
 def text_to_indices(text: str) -> list[int]:
@@ -99,5 +112,8 @@ def get_dataloader(dataset_type: str = "dev-clean", data_dir: str = "./data",
         shuffle=shuffle,
         collate_fn=collate_fn,
         num_workers=num_workers,
-        pin_memory=True,
+        pin_memory=torch.cuda.is_available(),
     )
+
+
+torchaudio.datasets.librispeech._load_waveform = load_audio

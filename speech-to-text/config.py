@@ -29,7 +29,7 @@ class TrainConfig:
     learning_rate: float = 3e-4
     weight_decay: float = 1e-5
     max_grad_norm: float = 5.0
-    num_workers: int = 4
+    num_workers: int = 0
     dataset_url: str = "dev-clean"  # start small; use "train-clean-100" for real training
     data_dir: str = "./data"
     checkpoint_dir: str = "./checkpoints"
