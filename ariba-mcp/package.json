@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "persistence": "^2.3.0"
+  }
+}

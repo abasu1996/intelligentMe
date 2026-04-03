@@ -1,0 +1,1066 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Supplier Risk Engagements API",
+    "description": "The Supplier Risk Engagements API retrieves engagement data including engagement projects, issues, and modular questionnaires.",
+    "version": "1.0.0"
+  },
+  "host": "openapi.ariba.com",
+  "basePath": "/SR/api/supplierRisk/v2",
+  "tags": [
+    {
+      "name": "Supplier Risk Engagements API",
+      "description": "Exports the engagement data from your engagement projects, issues, and modular questionnaires."
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/engagements": {
+      "get": {
+        "tags": [
+          "Supplier Risk Engagements API"
+        ],
+        "summary": "Search engagement projects",
+        "description": "This API will fetch paginated details of engagements based on the limit  configured in the system. Optionally you can pass in additional filter  parameters to get only a subset of engagements. API accepts query param  $skip to get the next page response.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "realm",
+            "type": "string",
+            "required": true,
+            "in": "query",
+            "description": "This parameter specifies one of the realm names for which the client application is authenticated and provides access to the data in that realm. Try it out on Sandbox with: s4All-3"
+          },
+          {
+            "name": "$count",
+            "type": "string",
+            "in": "query",
+            "description": "When value is true, total count of records will be returned.<br/><br/> Usage explained as below:<br/><br/> $count=true: returns total count of records after applying  the filters.<br/><br/> $count=false or no $count is passed: page meta data will not be  returned in the response."
+          },
+          {
+            "name": "$top",
+            "type": "string",
+            "in": "query",
+            "description": "Value passed in this query parameter decides the page limit or page size of the current page returned.<br/><br/> Usage explained as below:<br/><br/> $top=10: returns first 10 records for that page from the offset ID and value has to be greater than 0 and lesser than or equal to system defined page limit. Here system defined page limit is 100."
+          },
+          {
+            "name": "$skip",
+            "type": "string",
+            "in": "query",
+            "description": "offsetId/pageToken for pagination.<br/><br/> No offsetId/pageToken is required when the API is invoked for the  first time. Response header will contain X-Pagination-Token and  response body will contain pageToken if the records are not  exhausted. The pageToken returned for a page can be passed to the  $skip token to get the next page.<br/><br/> Usage explained as below:<br/><br/> scenario 1 - $skip=0 or not passing any query parameter are both  same. API will return page 1 records from start depending on the  $top query parameter value if present else the configured page  limit(100)<br/><br/> scenario 2 - $skip=10 - API skips first 10 records and retrieves the successive page records depending on the $top query parameter value if present else the configured page limit(100)."
+          },
+          {
+            "name": "$filter",
+            "type": "string",
+            "in": "query",
+            "description": "This request parameter takes updatedDateFrom and updatedDateTo parameters in yyyy-MM-ddTHH:mm:ssZ GMT time zone format and returns all records in the range depending on the configured page limit.<br/><br/> Usage explained as below:<br/><br/> scenario 1 - $filter=updatedDateFrom ge 2018-09-29T12:20:51Z and  updatedDateTo le 2019-10-04T12:20:51Z - retrieves all records that  fall between this range depending on the configured page limit<br/><br/> scenario 2 - $filter=updatedDateTo le 2019-10-04T12:20:51Z -  retrieves all records from start till the date specified above  depending on the configured page limit<br/><br/> scenario 3 - $filter=updatedDateFrom ge 2018-09-29T12:20:51Z -  API throws InvalidParameter Exception as updatedDateTo is a  mandatory parameter."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/EngagementSearchResponse"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/InvalidInputParameter"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/engagements/{workspaceId}": {
+      "get": {
+        "tags": [
+          "Supplier Risk Engagements API"
+        ],
+        "summary": "Retrieve engagement project details by engagement workspace ID",
+        "description": "This API will fetch all engagement project details for a given project ID.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "realm",
+            "type": "string",
+            "required": true,
+            "in": "query",
+            "description": "Identify the requested realm."
+          },
+          {
+            "name": "workspaceId",
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "description": "Identify the Vendor ID."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/EngagementResponse"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/InvalidInputParameter"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/issues": {
+      "get": {
+        "tags": [
+          "Supplier Risk Engagements API"
+        ],
+        "summary": "Search issues",
+        "description": "This API will fetch paginated details of issues based on the limit  configured in the system. Optionally you can pass in additional filter  parameters to get only a subset of issues. API accepts query param  $skip to get the next page response.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "realm",
+            "type": "string",
+            "required": true,
+            "in": "query",
+            "description": "Identify the requested realm."
+          },
+          {
+            "name": "$count",
+            "type": "string",
+            "in": "query",
+            "description": "When value is true, total count of records will be returned.<br/><br/> Usage explained as below:<br/><br/> $count=true: returns total count of records after applying  the filters.<br/><br/> $count=false or no $count is passed: page meta data will not be  returned in the response."
+          },
+          {
+            "name": "$top",
+            "type": "string",
+            "in": "query",
+            "description": "Value passed in this query parameter decides the page limit or page size of the current page returned.<br/><br/> Usage explained as below:<br/><br/> $top=10: returns first 10 records for that page from the offset ID and value has to be greater than 0 and lesser than or equal to system defined page limit. Here system defined page limit is 100."
+          },
+          {
+            "name": "$skip",
+            "type": "string",
+            "in": "query",
+            "description": "offsetId/pageToken for pagination.<br/><br/> No offsetId/pageToken is required when the API is invoked for the  first time. Response header will contain X-Pagination-Token and  response body will contain pageToken if the records are not  exhausted. The pageToken returned for a page can be passed to the  $skip token to get the next page.<br/><br/> Usage explained as below:<br/><br/> scenario 1 - $skip=0 or not passing any query parameter are both  same. API will return page 1 records from start depending on the  $top query parameter value if present else the configured page  limit(100)<br/><br/> scenario 2 - $skip=10 - API skips first 10 records and retrieves the successive page records depending on the $top query parameter value if present else the configured page limit(100)."
+          },
+          {
+            "name": "$filter",
+            "type": "string",
+            "in": "query",
+            "description": "This request parameter takes updatedDateFrom and updatedDateTo parameters in yyyy-MM-ddTHH:mm:ssZ GMT time zone format and returns all records in the range depending on the configured page limit.<br/><br/> Usage explained as below:<br/><br/> scenario 1 - $filter=updatedDateFrom ge 2018-09-29T12:20:51Z and  updatedDateTo le 2019-10-04T12:20:51Z - retrieves all records that  fall between this range depending on the configured page limit<br/><br/> scenario 2 - $filter=updatedDateTo le 2019-10-04T12:20:51Z -  retrieves all records from start till the date specified above  depending on the configured page limit<br/><br/> scenario 3 - $filter=updatedDateFrom ge 2018-09-29T12:20:51Z -  API throws InvalidParameter Exception as updatedDateTo is a  mandatory parameter."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/IssueSearchResponse"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/InvalidInputParameter"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/issues/{workspaceId}": {
+      "get": {
+        "tags": [
+          "Supplier Risk Engagements API"
+        ],
+        "summary": "Retrieve issue details by issue workspace ID",
+        "description": "This API will fetch all issue details for a given issue ID.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "realm",
+            "type": "string",
+            "required": true,
+            "in": "query",
+            "description": "Identify the requested realm."
+          },
+          {
+            "name": "workspaceId",
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "description": "Identify the Issue."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/IssueResponse"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/InvalidInputParameter"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/questionnaires": {
+      "get": {
+        "tags": [
+          "Supplier Risk Engagements API"
+        ],
+        "summary": "Search questionnaires",
+        "description": "This API will fetch paginated details of questionnaires based on the limit  configured in the system. Optionally you can pass in additional filter  parameters to get only a subset of Questionnaires. API accepts query param  $skip to get the next page response.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "realm",
+            "type": "string",
+            "required": true,
+            "in": "query",
+            "description": "Identify the requested realm."
+          },
+          {
+            "name": "$count",
+            "type": "string",
+            "in": "query",
+            "description": "When value is true, total count of records will be returned.<br/><br/> Usage explained as below:<br/><br/> $count=true: returns total count of records after applying  the filters.<br/><br/> $count=false or no $count is passed: page meta data will not be  returned in the response."
+          },
+          {
+            "name": "$top",
+            "type": "string",
+            "in": "query",
+            "description": "Value passed in this query parameter decides the page limit or page size of the current page returned.<br/><br/> Usage explained as below:<br/><br/> $top=10: returns first 10 records for that page from the offset ID and value has to be greater than 0 and lesser than or equal to system defined page limit. Here system defined page limit is 100."
+          },
+          {
+            "name": "$skip",
+            "type": "string",
+            "in": "query",
+            "description": "offsetId/pageToken for pagination.<br/><br/> No offsetId/pageToken is required when the API is invoked for the  first time. Response header will contain X-Pagination-Token and  response body will contain pageToken if the records are not  exhausted. The pageToken returned for a page can be passed to the  $skip token to get the next page.<br/><br/> Usage explained as below:<br/><br/> scenario 1 - $skip=0 or not passing any query parameter are both  same. API will return page 1 records from start depending on the  $top query parameter value if present else the configured page  limit(100)<br/><br/> scenario 2 - $skip=10 - API skips first 10 records and retrieves the successive page records depending on the $top query parameter value if present else the configured page limit(100)."
+          },
+          {
+            "name": "$filter",
+            "type": "string",
+            "in": "query",
+            "description": "This request parameter takes updatedDateFrom and updatedDateTo parameters in yyyy-MM-ddTHH:mm:ssZ GMT time zone format and returns all records in the range depending on the configured page limit.<br/><br/> Usage explained as below:<br/><br/> scenario 1 - $filter=updatedDateFrom ge 2018-09-29T12:20:51Z and  updatedDateTo le 2019-10-04T12:20:51Z - retrieves all records that  fall between this range depending on the configured page limit<br/><br/> scenario 2 - $filter=updatedDateTo le 2019-10-04T12:20:51Z -  retrieves all records from start till the date specified above  depending on the configured page limit<br/><br/> scenario 3 - $filter=updatedDateFrom ge 2018-09-29T12:20:51Z -  API throws InvalidParameter Exception as updatedDateTo is a  mandatory parameter."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/QuestionnaireSearchResponse"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/InvalidInputParameter"
+          },
+          "429": {
+            "$ref": "#/responses/RateLimitError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          },
+          "504": {
+            "$ref": "#/responses/GatewayTimeoutError"
+          }
+        }
+      }
+    },
+    "/questionnaires/{workspaceId}": {
+      "get": {
+        "tags": [
+          "Supplier Risk Engagements API"
+        ],
+        "summary": "Retrieve questionnaire details by questionnaire workspace ID",
+        "description": "This API will fetch all questionnaire details for a given workspace ID.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "realm",
+            "type": "string",
+            "required": true,
+            "in": "query",
+            "description": "Identify the requested realm."
+          },
+          {
+            "name": "workspaceId",
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "description": "Identify the Questionnaire ID."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/QuestionnaireResponse"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/InvalidInputParameter"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Assessment": {
+      "type": "object",
+      "properties": {
+        "workspaceId": {
+          "type": "string"
+        },
+        "assessmentId": {
+          "type": "string"
+        },
+        "assessmentName": {
+          "type": "string"
+        },
+        "assessmentType": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "visibility": {
+          "type": "string"
+        },
+        "imported": {
+          "type": "string"
+        },
+        "skipped": {
+          "type": "string"
+        },
+        "skippedReason": {
+          "type": "string"
+        },
+        "riskScore": {
+          "type": "string"
+        },
+        "targetScore": {
+          "type": "string"
+        },
+        "modifiedDate": {
+          "type": "string"
+        },
+        "sentDate": {
+          "type": "string"
+        },
+        "expirationDate": {
+          "type": "string"
+        },
+        "smVendorId": {
+          "type": "string"
+        },
+        "controlId": {
+          "type": "string"
+        }
+      }
+    },
+    "AssessmentSummary": {
+      "type": "object",
+      "properties": {
+        "workspaceId": {
+          "type": "string"
+        },
+        "assessmentId": {
+          "type": "string"
+        },
+        "assessmentName": {
+          "type": "string"
+        },
+        "assessmentType": {
+          "type": "string"
+        }
+      }
+    },
+    "Comment": {
+      "type": "object",
+      "properties": {
+        "comment": {
+          "type": "string"
+        },
+        "user": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        }
+      }
+    },
+    "Commodity": {
+      "type": "object",
+      "properties": {
+        "domain": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "Control": {
+      "type": "object",
+      "properties": {
+        "controlId": {
+          "type": "string"
+        },
+        "controlName": {
+          "type": "string"
+        },
+        "controlType": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "decisionMaker": {
+          "type": "string"
+        },
+        "riskType": {
+          "type": "string"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "taskAssignee": {
+          "type": "string"
+        },
+        "residualRiskRating": {
+          "type": "string"
+        },
+        "engagementId": {
+          "type": "string"
+        },
+        "assessments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AssessmentSummary"
+          }
+        }
+      }
+    },
+    "Engagement": {
+      "type": "object",
+      "properties": {
+        "workspaceId": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "requestedOn": {
+          "type": "string"
+        },
+        "requestedBy": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "inherentRisk": {
+          "type": "string"
+        },
+        "residualRisk": {
+          "type": "string"
+        },
+        "srTemplateUpgradeStatus": {
+          "$ref": "#/definitions/SRTemplateUpgradeStatus"
+        },
+        "supplier": {
+          "$ref": "#/definitions/Supplier"
+        },
+        "commodities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Commodity"
+          }
+        },
+        "tasks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Task"
+          }
+        },
+        "controls": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Control"
+          }
+        },
+        "assessments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Assessment"
+          }
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IssueSummary"
+          }
+        },
+        "domainBasedRiskScores": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DomainBasedRiskScoresSummary"
+          }
+        }
+      }
+    },
+    "EngagementResponse": {
+      "type": "object",
+      "properties": {
+        "engagement": {
+          "$ref": "#/definitions/Engagement"
+        }
+      }
+    },
+    "EngagementSearchResponse": {
+      "type": "object",
+      "properties": {
+        "engagements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EngagementSummary"
+          }
+        },
+        "count": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "EngagementSummary": {
+      "type": "object",
+      "properties": {
+        "workspaceId": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "smVendorId": {
+          "type": "string"
+        },
+        "updatedDate": {
+          "type": "string"
+        }
+      }
+    },
+    "Issue": {
+      "type": "object",
+      "properties": {
+        "workspaceId": {
+          "type": "string"
+        },
+        "parentType": {
+          "type": "string"
+        },
+        "parentId": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "assignee": {
+          "type": "string"
+        },
+        "issueType": {
+          "type": "string"
+        },
+        "classification": {
+          "type": "string"
+        },
+        "severity": {
+          "type": "string"
+        },
+        "analysisDecision": {
+          "type": "string"
+        },
+        "riskDomain": {
+          "type": "string"
+        },
+        "riskRating": {
+          "type": "string"
+        },
+        "residualRisk": {
+          "type": "string"
+        },
+        "dueDate": {
+          "type": "string"
+        },
+        "approvalDate": {
+          "type": "string"
+        },
+        "resolutionDate": {
+          "type": "string"
+        },
+        "resolutionDescription": {
+          "type": "string"
+        },
+        "updatedDate": {
+          "type": "string"
+        },
+        "supplier": {
+          "$ref": "#/definitions/Supplier"
+        },
+        "control": {
+          "$ref": "#/definitions/Control"
+        },
+        "tasks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Task"
+          }
+        }
+      }
+    },
+    "IssueResponse": {
+      "type": "object",
+      "properties": {
+        "issue": {
+          "$ref": "#/definitions/Issue"
+        }
+      }
+    },
+    "IssueSearchResponse": {
+      "type": "object",
+      "properties": {
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IssueSummary"
+          }
+        },
+        "count": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "IssueSummary": {
+      "type": "object",
+      "properties": {
+        "workspaceId": {
+          "type": "string"
+        },
+        "parentType": {
+          "type": "string"
+        },
+        "parentId": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "updatedDate": {
+          "type": "string"
+        }
+      }
+    },
+    "DomainBasedRiskScoresSummary": {
+      "type": "object",
+      "properties": {
+        "riskDomain": {
+          "type": "string"
+        },
+        "inherentRisk": {
+          "type": "string"
+        },
+        "residualRisk": {
+          "type": "string"
+        },
+        "contributingRiskControls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "QuestionAndAnswer": {
+      "type": "object",
+      "properties": {
+        "section": {
+          "type": "string"
+        },
+        "question": {
+          "type": "string"
+        },
+        "answerType": {
+          "type": "string"
+        },
+        "answer": {
+          "type": "string"
+        }
+      }
+    },
+    "Questionnaire": {
+      "type": "object",
+      "properties": {
+        "workspaceId": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "sentDate": {
+          "type": "string"
+        },
+        "dueDate": {
+          "type": "string"
+        },
+        "approvedDate": {
+          "type": "string"
+        },
+        "deniedDate": {
+          "type": "string"
+        },
+        "expirationDate": {
+          "type": "string"
+        },
+        "updatedDate": {
+          "type": "string"
+        },
+        "supplier": {
+          "$ref": "#/definitions/Supplier"
+        },
+        "questionsAndAnswers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/QuestionAndAnswer"
+          }
+        }
+      }
+    },
+    "QuestionnaireResponse": {
+      "type": "object",
+      "properties": {
+        "questionnaire": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Questionnaire"
+          }
+        }
+      }
+    },
+    "QuestionnaireSearchResponse": {
+      "type": "object",
+      "properties": {
+        "questionnaires": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/QuestionnaireSummary"
+          }
+        },
+        "count": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "QuestionnaireSummary": {
+      "type": "object",
+      "properties": {
+        "workspaceId": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "sentDate": {
+          "type": "string"
+        },
+        "smVendorId": {
+          "type": "string"
+        },
+        "updatedDate": {
+          "type": "string"
+        }
+      }
+    },
+    "SRTemplateUpgradeStatus": {
+      "type": "object",
+      "properties": {
+        "templateUpgradeMarkDate": {
+          "type": "string"
+        },
+        "workspaceId": {
+          "type": "string"
+        },
+        "templateVersionUpgradedFrom": {
+          "type": "string"
+        },
+        "templateVersionUpgradedTo": {
+          "type": "string"
+        },
+        "engagementRequestStatus": {
+          "type": "string"
+        },
+        "templateUpgradeCompleteDate": {
+          "type": "string"
+        },
+        "shouldNotifyEROwner": {
+          "type": "string"
+        },
+        "templateUpgradeStatus": {
+          "type": "string"
+        }
+      }
+    },
+    "Supplier": {
+      "type": "object",
+      "properties": {
+        "smVendorId": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "legalName": {
+          "type": "string"
+        },
+        "telephone": {
+          "type": "string"
+        },
+        "fax": {
+          "type": "string"
+        },
+        "contactFirstName": {
+          "type": "string"
+        },
+        "contactMiddleName": {
+          "type": "string"
+        },
+        "contactLastName": {
+          "type": "string"
+        },
+        "contactTelephone": {
+          "type": "string"
+        },
+        "contactEmail": {
+          "type": "string"
+        }
+      }
+    },
+    "Task": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "taskId": {
+          "type": "string"
+        },
+        "taskType": {
+          "type": "string"
+        },
+        "taskStatus": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "originalOwner": {
+          "type": "string"
+        },
+        "dueDate": {
+          "type": "string"
+        },
+        "comments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Comment"
+          }
+        }
+      }
+    },
+    "ErrorBadRequest": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "example": "Invalid input parameter"
+        },
+        "message": {
+          "type": "string",
+          "example": [
+            "The API key passed in the request is not valid.",
+            "The API key is missing in the header.",
+            "The API key provided in the header does not match with the API key in the token.",
+            "Invalid or missing request parameters: sm_vendor_id or realm.",
+            "Realm YYY in the request does not match with realms in the token.",
+            "Realm YYY in the request is not available.",
+            "Check the realm in the request. Realm value should not be null or empty.",
+            "Invalid input parameter."
+          ]
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ]
+    },
+    "ErrorGatewayTimeout": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "example": "Gateway Time-out"
+        },
+        "message": {
+          "type": "string",
+          "example": "Gateway Time-out."
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ]
+    },
+    "ErrorInternal": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "example": "Internal Server Error"
+        },
+        "message": {
+          "type": "string",
+          "example": "Internal server error."
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ]
+    },
+    "ErrorRateLimit": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "example": "Rate limit error"
+        },
+        "message": {
+          "type": "string",
+          "example": "Rate limit error"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ]
+    },
+    "Error400": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "$ref": "#/definitions/ErrorBadRequest"
+        }
+      }
+    },
+    "Error429": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "$ref": "#/definitions/ErrorRateLimit"
+        }
+      }
+    },
+    "Error500": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "$ref": "#/definitions/ErrorInternal"
+        }
+      }
+    },
+    "Error504": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "$ref": "#/definitions/ErrorGatewayTimeout"
+        }
+      }
+    }
+  },
+  "responses": {
+    "InvalidInputParameter": {
+      "description": "If your URL is not constructed properly, you have trailing spaces in URl, request body format is wrong etc.",
+      "schema": {
+        "$ref": "#/definitions/Error400"
+      }
+    },
+    "RateLimitError": {
+      "description": "You have exceeded the maximum permitted query rate. Refer to the developer  portal discovery page for this API for the applicable query rates.",
+      "schema": {
+        "$ref": "#/definitions/Error429"
+      }
+    },
+    "InternalServerError": {
+      "description": "The risk data could not be retrieved for the supplier. This may be due  to connection issues or the server is down. Try again after a while.",
+      "schema": {
+        "$ref": "#/definitions/Error500"
+      }
+    },
+    "GatewayTimeoutError": {
+      "description": "The server timeout time has been exceeded, possibly due to network traffic  or reliability issues. Retry your query.",
+      "schema": {
+        "$ref": "#/definitions/Error504"
+      }
+    }
+  }
+}
