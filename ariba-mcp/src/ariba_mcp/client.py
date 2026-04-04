@@ -49,7 +49,12 @@ class AribaClient:
     def base_url(self) -> str:
         return self._settings.ariba_api_url
 
-    async def get(self, url: str, params: dict[str, Any] | None = None) -> dict:
+    async def get(
+        self,
+        url: str,
+        params: dict[str, Any] | None = None,
+        api_path: str | None = None,
+    ) -> dict:
         """Send an authenticated GET to a full URL."""
         headers = await self.auth.get_headers()
         async with httpx.AsyncClient() as http:
@@ -59,11 +64,33 @@ class AribaClient:
             response.raise_for_status()
             return response.json()
 
-    async def post(self, url: str, json_body: dict | None = None, params: dict[str, Any] | None = None) -> dict:
+    async def post(
+        self,
+        url: str,
+        json_body: dict | None = None,
+        params: dict[str, Any] | None = None,
+        api_path: str | None = None,
+    ) -> dict:
         """Send an authenticated POST."""
         headers = await self.auth.get_headers()
         async with httpx.AsyncClient() as http:
             response = await http.post(
+                url, headers=headers, json=json_body, params=params, timeout=self._settings.request_timeout
+            )
+            response.raise_for_status()
+            return response.json()
+
+    async def put(
+        self,
+        url: str,
+        json_body: dict | None = None,
+        params: dict[str, Any] | None = None,
+        api_path: str | None = None,
+    ) -> dict:
+        """Send an authenticated PUT."""
+        headers = await self.auth.get_headers()
+        async with httpx.AsyncClient() as http:
+            response = await http.put(
                 url, headers=headers, json=json_body, params=params, timeout=self._settings.request_timeout
             )
             response.raise_for_status()

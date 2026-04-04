@@ -84,6 +84,12 @@ class AribaSettings(BaseSettings):
     # Base URLs (SAP Ariba standard endpoints)
     ariba_oauth_url: str = "https://api.ariba.com"
     ariba_api_url: str = "https://openapi.ariba.com/api"
+    content_lookup_production_url: str | None = None
+    internal_catalogs_shop_production_url: str | None = None
+    internal_catalogs_shop_id: str | None = None
+    public_catalogs_shop_production_url: str | None = None
+    public_catalogs_shop_id: str | None = None
+    user_qualification_production_url: str | None = None
 
     def get_api_settings(self, api_name: str) -> "AribaSettings":
         api_name = api_name.lower()
@@ -110,6 +116,13 @@ class AribaSettings(BaseSettings):
                 update[target_field] = value
 
         return self.model_copy(update=update) if update else self
+
+    def resolve_api_url(self, override_url: str | None, api_path: str) -> str:
+        """Resolve an API-specific base URL, falling back to the shared Ariba API base."""
+        if override_url:
+            return override_url.rstrip("/")
+        return f"{self.ariba_api_url.rstrip('/')}/{api_path}"
+
     ariba_network_id: str | None = None
 
     # Tuning

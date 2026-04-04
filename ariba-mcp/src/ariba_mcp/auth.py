@@ -93,7 +93,7 @@ class AribaAuthClient:
             self._expires_at = time.time() + data.get("expires_in", 1440)
             return self._token
 
-    async def get_headers(self) -> dict[str, str]:
+    async def get_headers(self, api_path: str | None = None) -> dict[str, str]:
         """Return header set for an authenticated Ariba API request."""
         token = await self.get_token()
         headers = {

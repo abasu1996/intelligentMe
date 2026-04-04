@@ -1,0 +1,14 @@
+---
+applications:
+  - name: ariba-mcp
+    buildpacks:
+      - python_buildpack
+    random-route: true
+    instances: 1
+    memory: 512M
+    disk_quota: 1G
+    timeout: 180
+    health-check-type: port
+    env:
+      MCP_HTTP_PATH: /mcp
+      PYTHONUNBUFFERED: "1"

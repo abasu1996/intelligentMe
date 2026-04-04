@@ -5,6 +5,8 @@ description = "MCP server for SAP Ariba Sourcing APIs"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "fastmcp>=2.12.3",
     "httpx>=0.28.1",
-    "mcp[cli]>=1.21.0",
+    "mcp[cli]>=1.23.1",
+    "uvicorn>=0.31.1",
 ]
