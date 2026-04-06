@@ -44,8 +44,11 @@ class AribaSettings(BaseSettings):
 
     # Required credentials — shared across all 8 team members
     ariba_realm: str
+    ariba_realm_ms: str = ""  # Optional separate realm for Microsoft-hosted Ariba instances
     ariba_client_id: str
+    ariba_client_id_ms: str = ""   # Optional separate client ID for Microsoft-hosted Ariba instances
     ariba_client_secret: str
+    ariba_client_secret_ms: str = ""  # Optional separate client secret for Microsoft-hosted Ariba instances
     ariba_api_key: str
 
     # Supplier Risk Engagements API credentials
@@ -82,7 +85,8 @@ class AribaSettings(BaseSettings):
     supplier_information_basic_auth: str | None = None
 
     # Base URLs (SAP Ariba standard endpoints)
-    ariba_oauth_url: str = "https://api.ariba.com"
+    ariba_oauth_url: str = "https://api.in.cloud.ariba.com"
+    ariba_oauth_url_ms: str = "https://openapi.in.cloud.ariba.com"
     ariba_api_url: str = "https://openapi.ariba.com/api"
     content_lookup_production_url: str | None = None
     internal_catalogs_shop_production_url: str | None = None
@@ -108,6 +112,7 @@ class AribaSettings(BaseSettings):
             "client_secret": "ariba_client_secret",
             "api_key": "ariba_api_key",
         }
+        
 
         for source_suffix, target_field in credential_map.items():
             source_attr = f"{api_name}_{source_suffix}"

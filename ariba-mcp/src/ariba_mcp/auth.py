@@ -21,7 +21,7 @@ class DirectAuthClient:
         client_id: str,
         client_secret: str,
         api_key: str,
-        oauth_url: str = "https://api.ariba.com",
+        oauth_url: str = "https://api.in.cloud.ariba.com",
         timeout: int = 30,
     ) -> None:
         self._client_id = client_id

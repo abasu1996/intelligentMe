@@ -44,6 +44,9 @@ class AribaClient:
     @property
     def realm(self) -> str:
         return self._settings.ariba_realm
+    @property
+    def realm_ms(self)-> str:
+        return self._settings.ariba_realm_ms
 
     @property
     def base_url(self) -> str:
