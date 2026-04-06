@@ -23,7 +23,7 @@ from ariba_mcp.errors import handle_ariba_error
 BASE_URL = "https://openapi.ariba.com/api/sourcing-project-management/v2/prod"
 BASE_URL_MS = "https://openapi.in.cloud.ariba.com/api/sourcing-project-management/v2/prod"
 
-
+##Add more information about the build
 class GetSourcingProjectInput(BaseModel):
     project_id: str = Field(description="SAP Ariba sourcing project ID to retrieve")
     user: str = Field(description="SAP Ariba user for user-context authentication")
