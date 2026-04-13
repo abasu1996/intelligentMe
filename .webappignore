@@ -1,0 +1,7 @@
+*
+
+!.webappignore
+!mcpserver/
+!mcpserver/**
+!requirements.txt
+!startup.sh
