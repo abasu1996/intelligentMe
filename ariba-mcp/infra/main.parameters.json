@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environmentName": {
+      "value": "${AZURE_ENV_NAME}"
+    },
+    "location": {
+      "value": "${AZURE_LOCATION}"
+    },
+    "aribaRealm": {
+      "value": "${ARIBA_REALM}"
+    },
+    "aribaClientId": {
+      "value": "${ARIBA_CLIENT_ID}"
+    },
+    "aribaClientSecret": {
+      "value": "${ARIBA_CLIENT_SECRET}"
+    },
+    "aribaApiKey": {
+      "value": "${ARIBA_API_KEY}"
+    },
+    "aribaOauthUrl": {
+      "value": "${ARIBA_OAUTH_URL}"
+    },
+    "aribaApiUrl": {
+      "value": "${ARIBA_API_URL}"
+    }
+  }
+}

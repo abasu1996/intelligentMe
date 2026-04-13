@@ -174,6 +174,26 @@ python -m ariba_mcp.server
 npx @modelcontextprotocol/inspector python -m ariba_mcp.server
 ```
 
+## Azure App Service
+
+This project can be deployed to Azure App Service from the `ariba-mcp/` folder using:
+
+```bash
+azd up
+```
+
+The HTTP app entrypoint is [app.py](/Users/megamind/intelligentMe/intelligentMe/ariba-mcp/app.py), and the App Service startup command uses:
+
+```bash
+sh startup.sh
+```
+
+Required Azure App Settings include:
+- `ARIBA_REALM`
+- `ARIBA_CLIENT_ID`
+- `ARIBA_CLIENT_SECRET`
+- `ARIBA_API_KEY`
+
 ### Connect to Claude Desktop
 
 Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:

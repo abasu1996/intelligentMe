@@ -1,0 +1,12 @@
+name: mcpserver-appservice
+metadata:
+  template: azd-init
+
+infra:
+  path: infra
+
+services:
+  mcpserver:
+    project: ./mcpserver
+    language: python
+    host: appservice

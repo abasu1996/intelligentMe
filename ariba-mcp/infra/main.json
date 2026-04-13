@@ -1,0 +1,304 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.42.1.51946",
+      "templateHash": "2685628161202689001"
+    }
+  },
+  "parameters": {
+    "environmentName": {
+      "type": "string",
+      "metadata": {
+        "description": "AZD environment name."
+      }
+    },
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Azure region for all resources."
+      }
+    },
+    "aribaRealm": {
+      "type": "string",
+      "metadata": {
+        "description": "Required Ariba realm name."
+      }
+    },
+    "aribaClientId": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Required Ariba OAuth client ID."
+      }
+    },
+    "aribaClientSecret": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Required Ariba OAuth client secret."
+      }
+    },
+    "aribaApiKey": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Required Ariba API key."
+      }
+    },
+    "aribaOauthUrl": {
+      "type": "string",
+      "defaultValue": "https://api.ariba.com",
+      "metadata": {
+        "description": "Optional Ariba OAuth base URL override."
+      }
+    },
+    "aribaApiUrl": {
+      "type": "string",
+      "defaultValue": "https://openapi.ariba.com/api",
+      "metadata": {
+        "description": "Optional Ariba API base URL override."
+      }
+    }
+  },
+  "variables": {
+    "tags": {
+      "azd-env-name": "[parameters('environmentName')]",
+      "project": "ariba-mcp"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/resourceGroups",
+      "apiVersion": "2023-07-01",
+      "name": "[format('rg-{0}', parameters('environmentName'))]",
+      "location": "[parameters('location')]",
+      "tags": "[variables('tags')]"
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2025-04-01",
+      "name": "appservice",
+      "resourceGroup": "[format('rg-{0}', parameters('environmentName'))]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "name": {
+            "value": "ariba"
+          },
+          "serviceName": {
+            "value": "ariba"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "tags": {
+            "value": "[variables('tags')]"
+          },
+          "aribaRealm": {
+            "value": "[parameters('aribaRealm')]"
+          },
+          "aribaClientId": {
+            "value": "[parameters('aribaClientId')]"
+          },
+          "aribaClientSecret": {
+            "value": "[parameters('aribaClientSecret')]"
+          },
+          "aribaApiKey": {
+            "value": "[parameters('aribaApiKey')]"
+          },
+          "aribaOauthUrl": {
+            "value": "[parameters('aribaOauthUrl')]"
+          },
+          "aribaApiUrl": {
+            "value": "[parameters('aribaApiUrl')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.42.1.51946",
+              "templateHash": "785964650810532395"
+            }
+          },
+          "parameters": {
+            "name": {
+              "type": "string",
+              "metadata": {
+                "description": "Base resource name."
+              }
+            },
+            "serviceName": {
+              "type": "string",
+              "metadata": {
+                "description": "Azure service name tag."
+              }
+            },
+            "location": {
+              "type": "string",
+              "defaultValue": "[resourceGroup().location]",
+              "metadata": {
+                "description": "Deployment location."
+              }
+            },
+            "tags": {
+              "type": "object",
+              "defaultValue": {},
+              "metadata": {
+                "description": "Tags applied to all resources."
+              }
+            },
+            "aribaRealm": {
+              "type": "string"
+            },
+            "aribaClientId": {
+              "type": "securestring"
+            },
+            "aribaClientSecret": {
+              "type": "securestring"
+            },
+            "aribaApiKey": {
+              "type": "securestring"
+            },
+            "aribaOauthUrl": {
+              "type": "string"
+            },
+            "aribaApiUrl": {
+              "type": "string"
+            }
+          },
+          "variables": {
+            "resourceSuffix": "[take(uniqueString(subscription().id, resourceGroup().name, parameters('name')), 6)]",
+            "appServicePlanName": "[format('asp-{0}-{1}', parameters('name'), variables('resourceSuffix'))]",
+            "webAppName": "[format('app-{0}-{1}', parameters('name'), variables('resourceSuffix'))]",
+            "logAnalyticsName": "[format('log-{0}-{1}', parameters('name'), variables('resourceSuffix'))]",
+            "appInsightsName": "[format('appi-{0}-{1}', parameters('name'), variables('resourceSuffix'))]"
+          },
+          "resources": [
+            {
+              "type": "Microsoft.OperationalInsights/workspaces",
+              "apiVersion": "2023-09-01",
+              "name": "[variables('logAnalyticsName')]",
+              "location": "[parameters('location')]",
+              "tags": "[parameters('tags')]",
+              "properties": {
+                "sku": {
+                  "name": "PerGB2018"
+                },
+                "retentionInDays": 30
+              }
+            },
+            {
+              "type": "Microsoft.Insights/components",
+              "apiVersion": "2020-02-02",
+              "name": "[variables('appInsightsName')]",
+              "location": "[parameters('location')]",
+              "kind": "web",
+              "tags": "[parameters('tags')]",
+              "properties": {
+                "Application_Type": "web",
+                "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsName'))]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Web/serverfarms",
+              "apiVersion": "2022-09-01",
+              "name": "[variables('appServicePlanName')]",
+              "location": "[parameters('location')]",
+              "kind": "linux",
+              "sku": {
+                "name": "F1",
+                "tier": "Free"
+              },
+              "tags": "[parameters('tags')]",
+              "properties": {
+                "reserved": true
+              }
+            },
+            {
+              "type": "Microsoft.Web/sites",
+              "apiVersion": "2022-09-01",
+              "name": "[variables('webAppName')]",
+              "location": "[parameters('location')]",
+              "kind": "app,linux",
+              "tags": "[union(parameters('tags'), createObject('azd-service-name', parameters('serviceName')))]",
+              "identity": {
+                "type": "SystemAssigned"
+              },
+              "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+                "httpsOnly": true,
+                "siteConfig": {
+                  "linuxFxVersion": "PYTHON|3.12",
+                  "minTlsVersion": "1.2",
+                  "ftpsState": "Disabled",
+                  "http20Enabled": true,
+                  "healthCheckPath": "/mcp",
+                  "appCommandLine": "sh startup.sh"
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Web/sites/config",
+              "apiVersion": "2022-09-01",
+              "name": "[format('{0}/{1}', variables('webAppName'), 'appsettings')]",
+              "properties": {
+                "SCM_DO_BUILD_DURING_DEPLOYMENT": "true",
+                "ARIBA_REALM": "[parameters('aribaRealm')]",
+                "ARIBA_CLIENT_ID": "[parameters('aribaClientId')]",
+                "ARIBA_CLIENT_SECRET": "[parameters('aribaClientSecret')]",
+                "ARIBA_API_KEY": "[parameters('aribaApiKey')]",
+                "ARIBA_OAUTH_URL": "[parameters('aribaOauthUrl')]",
+                "ARIBA_API_URL": "[parameters('aribaApiUrl')]",
+                "APPLICATIONINSIGHTS_CONNECTION_STRING": "[reference(resourceId('Microsoft.Insights/components', variables('appInsightsName')), '2020-02-02').ConnectionString]",
+                "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('Microsoft.Insights/components', variables('appInsightsName')), '2020-02-02').InstrumentationKey]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Insights/components', variables('appInsightsName'))]",
+                "[resourceId('Microsoft.Web/sites', variables('webAppName'))]"
+              ]
+            }
+          ],
+          "outputs": {
+            "apiUrl": {
+              "type": "string",
+              "value": "[format('https://{0}', reference(resourceId('Microsoft.Web/sites', variables('webAppName')), '2022-09-01').defaultHostName)]"
+            },
+            "applicationInsightsConnectionString": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Insights/components', variables('appInsightsName')), '2020-02-02').ConnectionString]"
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[subscriptionResourceId('Microsoft.Resources/resourceGroups', format('rg-{0}', parameters('environmentName')))]"
+      ]
+    }
+  ],
+  "outputs": {
+    "AZURE_RESOURCE_GROUP": {
+      "type": "string",
+      "value": "[format('rg-{0}', parameters('environmentName'))]"
+    },
+    "API_URL": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('rg-{0}', parameters('environmentName'))), 'Microsoft.Resources/deployments', 'appservice'), '2025-04-01').outputs.apiUrl.value]"
+    },
+    "APPLICATIONINSIGHTS_CONNECTION_STRING": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('rg-{0}', parameters('environmentName'))), 'Microsoft.Resources/deployments', 'appservice'), '2025-04-01').outputs.applicationInsightsConnectionString.value]"
+    }
+  }
+}
