@@ -23,6 +23,11 @@ class CompareRequest(BaseModel):
     po_xml:str
 
 
+@app.get("/health")
+def health() -> Dict[str, str]:
+    return {"status": "ok"}
+
+
 print("Starting XML parsing utilities")
 def parse_document(xml_string:str) -> Dict:
     print(xml_string)

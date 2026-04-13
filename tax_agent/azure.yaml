@@ -1,0 +1,12 @@
+name: tax-agent-appservice
+metadata:
+  template: azd-init
+
+infra:
+  path: infra
+
+services:
+  taxagent:
+    project: .
+    language: python
+    host: appservice
