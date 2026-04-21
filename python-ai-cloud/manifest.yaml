@@ -1,0 +1,11 @@
+---
+applications:
+  - name: python-ai-model-app
+    memory: 512M
+    disk_quota: 1G
+    instances: 1
+    buildpacks:
+      - python_buildpack
+    command: gunicorn app:app --bind 0.0.0.0:$PORT
+    env:
+      PYTHONUNBUFFERED: "true"

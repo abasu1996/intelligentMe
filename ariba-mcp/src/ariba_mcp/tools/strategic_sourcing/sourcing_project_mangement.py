@@ -72,10 +72,23 @@ def register(mcp: FastMCP, client: AribaClient) -> None:
         user: str | None = None,
         password_adapter: str | None = None,
         filter_expr: str | None = None,
+        from_date: str | None = None,
+        to_date: str | None = None, 
         page_token: str | None = None,
         ctx: Context | None = None,
     ) -> str:
         try:
+            if not from_date or not to_date:
+                        return json.dumps({
+                            "need_input": {
+                        "type": "date_range",
+                        "title": "Select Invoice Date Range",
+                        "fields": [
+                            {"name": "from_date", "label": "From Date"},
+                            {"name": "to_date", "label": "To Date"}
+                        ]
+                    }
+                })
             if not user or not password_adapter or not filter_expr:
                 if ctx is None:
                     return json.dumps(
@@ -89,6 +102,7 @@ def register(mcp: FastMCP, client: AribaClient) -> None:
                     "Please provide the sourcing project credentials and date range to build the project filter.",
                     response_type=ListSourcingProjectsInput,
                 )
+                
 
                 if elicitation.action == "decline":
                     return json.dumps(
